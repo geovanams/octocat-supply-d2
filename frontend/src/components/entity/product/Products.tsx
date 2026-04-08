@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useQuery } from 'react-query';
 import { api } from '../../../api/config';
 import { useTheme } from '../../../context/ThemeContext';
+import StarRating from './StarRating';
 
 interface Product {
   productId: number;
@@ -26,8 +27,16 @@ export default function Products() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [ratings, setRatings] = useState<Record<number, number>>({});
   const { data: products, isLoading, error } = useQuery('products', fetchProducts);
   const { darkMode } = useTheme();
+
+  const handleRate = (productId: number, rating: number) => {
+    setRatings((prev) => ({
+      ...prev,
+      [productId]: rating,
+    }));
+  };
 
   const filteredProducts = products?.filter(
     (product) =>
@@ -184,6 +193,13 @@ export default function Products() {
                   >
                     {product.name}
                   </h3>
+                  <div className="mb-2">
+                    <StarRating
+                      productId={product.productId}
+                      rating={ratings[product.productId] || 0}
+                      onRate={handleRate}
+                    />
+                  </div>
                   <p
                     className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} mb-4 flex-grow transition-colors duration-300`}
                   >
@@ -296,6 +312,13 @@ export default function Products() {
             >
               {selectedProduct.name}
             </h2>
+            <div className="mb-4">
+              <StarRating
+                productId={selectedProduct.productId}
+                rating={ratings[selectedProduct.productId] || 0}
+                onRate={handleRate}
+              />
+            </div>
             <p
               className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} text-lg transition-colors duration-300`}
             >
