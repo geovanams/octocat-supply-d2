@@ -28,9 +28,7 @@ export default function StarRating({ productId, rating, onRate }: StarRatingProp
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            className="w-7 h-7"
-            fill={star <= displayRating ? '#F59E0B' : 'none'}
-            stroke={star <= displayRating ? '#F59E0B' : darkMode ? '#6B7280' : '#9CA3AF'}
+            className={`w-7 h-7 ${star <= displayRating ? 'fill-amber-400 stroke-amber-400' : `fill-none ${darkMode ? 'stroke-gray-500' : 'stroke-gray-400'}`}`}
             strokeWidth="1.5"
           >
             <path
